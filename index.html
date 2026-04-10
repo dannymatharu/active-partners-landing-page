@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof of Play — For Active Partnerships</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #192335;
+    --navy-deep:   #0f1825;
+    --navy-mid:    #1e2d45;
+    --mint:        #10B982;
+    --mint-dim:    rgba(16,185,130,0.15);
+    --mint-glow:   rgba(16,185,130,0.07);
+    --teal:        #2DD4BF;
+    --amber:       #FBBF24;
+    --pink:        #F472B6;
+    --blue:        #60A5FA;
+    --white:       #f8fafc;
+    --white-dim:   rgba(248,250,252,0.68);
+    --white-faint: rgba(248,250,252,0.32);
+    --card-bg:     rgba(30,45,69,0.92);
+    --border:      rgba(16,185,130,0.22);
+    --border-faint:rgba(248,250,252,0.07);
+    --nav-h:       64px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--navy);color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;}
+
+  .fade-up{opacity:1;transform:none;transition:opacity .65s ease,transform .65s ease;}
+  .fade-up.js-ready{opacity:0;transform:translateY(22px);}
+  .fade-up.visible{opacity:1!important;transform:translateY(0)!important;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(15,24,37,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-faint);padding:0 2rem;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;}
+  .nav-brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;}
+  .nav-mark{width:32px;height:32px;background:var(--mint);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--navy);}
+  .nav-name{font-weight:600;font-size:15px;color:var(--white);letter-spacing:-.3px;display:block;}
+  .nav-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--mint);letter-spacing:.5px;text-transform:uppercase;display:block;line-height:1;margin-top:1px;}
+  .nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+  .nav-links a{color:var(--white-dim);text-decoration:none;font-size:14px;transition:color .2s;}
+  .nav-links a:hover{color:var(--white);}
+  .nav-cta{background:var(--mint)!important;color:var(--navy)!important;padding:.45rem 1.2rem!important;border-radius:6px!important;font-weight:700!important;font-size:13px!important;}
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem;background:none;border:none;}
+  .nav-hamburger span{display:block;width:22px;height:2px;background:var(--white-dim);border-radius:2px;transition:transform .25s,opacity .25s;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-drawer{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:rgba(15,24,37,.98);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-faint);padding:1.5rem 2rem 2rem;z-index:199;flex-direction:column;gap:1rem;}
+  .nav-drawer.open{display:flex;}
+  .nav-drawer a{color:var(--white-dim);text-decoration:none;font-size:15px;padding:.5rem 0;border-bottom:1px solid var(--border-faint);}
+  .nav-drawer a:last-child{border-bottom:none;}
+  .nav-drawer .nav-cta{background:var(--mint)!important;color:var(--navy)!important;text-align:center;padding:.75rem!important;border-radius:8px!important;font-weight:700!important;border-bottom:none!important;margin-top:.5rem;}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:5.5rem 2rem;}
+  [id]{scroll-margin-top:calc(var(--nav-h) + 16px);}
+  .lbl{display:inline-block;font-family:'DM Mono',monospace;font-size:11px;color:var(--mint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1rem;}
+  .h2{font-family:'Fraunces',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.15;letter-spacing:-.02em;color:var(--white);margin-bottom:1.25rem;}
+  .h2 em{font-style:italic;color:var(--mint);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:3rem;}
+  .prose p{color:var(--white-dim);line-height:1.8;margin-bottom:1.2rem;font-size:1.01rem;}
+  .prose p:last-child{margin-bottom:0;}
+  .prose strong{color:var(--white);font-weight:600;}
+
+  .hero{min-height:100vh;padding:8rem 2rem 5rem;display:flex;align-items:center;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 75% 35%,rgba(16,185,130,.07) 0%,transparent 70%),radial-gradient(ellipse 40% 55% at 15% 75%,rgba(45,212,191,.04) 0%,transparent 70%);pointer-events:none;}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(16,185,130,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,130,.04) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black 20%,transparent 80%);}
+  .hero-inner{max-width:1100px;margin:0 auto;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:var(--mint-dim);border:1px solid var(--border);border-radius:100px;padding:.3rem .85rem;font-family:'DM Mono',monospace;font-size:11px;color:var(--mint);letter-spacing:.7px;text-transform:uppercase;margin-bottom:1.5rem;}
+  .dot{width:6px;height:6px;background:var(--mint);border-radius:50%;animation:blink 2.2s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+
+  .h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,4vw,3.6rem);font-weight:300;line-height:1.1;letter-spacing:-.025em;color:var(--white);margin-bottom:1.5rem;}
+  .h1 em{font-style:italic;color:var(--mint);}
+  .hero-body{font-size:1.05rem;color:var(--white-dim);line-height:1.72;margin-bottom:2.5rem;}
+  .actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+  .btn-p{background:var(--mint);color:var(--navy);padding:.9rem 2.1rem;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;transition:transform .2s,box-shadow .2s;}
+  .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(16,185,130,.28);}
+  .btn-g{color:var(--white-dim);padding:.9rem 1.5rem;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;border:1px solid var(--border-faint);transition:border-color .2s,color .2s;display:inline-block;}
+  .btn-g:hover{border-color:var(--border);color:var(--white);}
+
+  .hero-stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.5rem;}
+  .hss{background:var(--card-bg);border:1px solid var(--border-faint);border-radius:10px;padding:1.1rem 1.25rem;}
+  .hss-v{font-family:'Fraunces',serif;font-size:1.6rem;color:var(--mint);font-weight:300;line-height:1;display:block;margin-bottom:.2rem;}
+  .hss-l{font-size:12px;color:var(--white-dim);}
+
+  .band-dark{background:var(--navy-deep);border-top:1px solid var(--border-faint);border-bottom:1px solid var(--border-faint);}
+  .band-mid{background:var(--navy-mid);border-top:1px solid var(--border-faint);border-bottom:1px solid var(--border-faint);}
+
+  /* DASHBOARD SECTION */
+  .dashboard-intro{max-width:700px;margin-bottom:3rem;}
+  .dashboard-intro p{color:var(--white-dim);font-size:1.01rem;line-height:1.78;margin-bottom:1rem;}
+  .dashboard-intro p:last-child{margin-bottom:0;}
+  .dashboard-intro strong{color:var(--white);font-weight:600;}
+
+  /* Browser chrome */
+  .browser-wrap{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 32px 80px rgba(0,0,0,.6);margin-bottom:3rem;}
+  .browser-bar{background:#2a2a2e;padding:.6rem 1rem;display:flex;align-items:center;gap:.6rem;}
+  .browser-dot{width:10px;height:10px;border-radius:50%;}
+  .browser-dot.r{background:#ff5f57;}
+  .browser-dot.y{background:#febc2e;}
+  .browser-dot.g{background:#28c840;}
+  .browser-url{flex:1;background:#1a1a1e;border-radius:5px;padding:.25rem .75rem;font-family:'DM Mono',monospace;font-size:11px;color:#888;margin:0 .5rem;}
+
+  /* ── AP DASHBOARD MOCKUP (dark theme matching real AP dashboard) ── */
+  .dash-mock{
+    background:#0d1117;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;
+    color:#e8edf2;
+    overflow:hidden;
+  }
+
+  .dm-header{
+    background:rgba(13,17,23,.95);
+    border-bottom:1px solid rgba(79,170,201,.15);
+    padding:0 20px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .dm-brand{font-size:14px;font-weight:700;color:#e8edf2;letter-spacing:-.01em;}
+  .dm-brand em{color:#4faac9;font-style:normal;}
+  .dm-org{font-family:'DM Mono',monospace;font-size:10px;color:#4faac9;letter-spacing:.06em;}
+  .dm-btns{display:flex;gap:8px;}
+  .dm-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#98a8b8;padding:4px 10px;border-radius:5px;font-size:10px;}
+
+  .dm-body{padding:20px;}
+  .dm-updated{font-family:'DM Mono',monospace;font-size:10px;color:#5a6a7a;text-align:right;margin-bottom:14px;}
+  .dm-section-title{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4faac9;margin-bottom:12px;margin-top:16px;}
+  .dm-section-title:first-child{margin-top:0;}
+
+  .dm-hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+  .dm-stat{background:#161c26;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px;}
+  .dm-stat.hl{background:linear-gradient(135deg,#161c26,#0f1c28);border-color:rgba(79,170,201,.2);}
+  .dm-stat-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#5a6a7a;margin-bottom:5px;}
+  .dm-stat-val{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:800;color:#4faac9;line-height:1;}
+  .dm-stat-val.g{color:#3ecf8e;}
+  .dm-stat-val.a{color:#f5a623;}
+  .dm-stat-sub{font-size:10px;color:#5a6a7a;margin-top:4px;}
+
+  .dm-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+  .dm-card{background:#161c26;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px;}
+  .dm-card-title{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;margin-bottom:10px;color:#e8edf2;}
+
+  .dm-brow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:11px;}
+  .dm-brow:last-child{border-bottom:none;}
+  .dm-brow-l{color:#5a6a7a;}
+  .dm-brow-v{font-family:'DM Mono',monospace;color:#e8edf2;font-weight:500;}
+  .dm-brow-v.b{color:#4faac9;}
+  .dm-brow-v.g{color:#3ecf8e;}
+  .dm-brow-v.a{color:#f5a623;}
+
+  .dm-nd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
+  .dm-nd-box{background:#1c2433;border-radius:6px;padding:12px;text-align:center;}
+  .dm-nd-num{font-family:'DM Sans',sans-serif;font-size:20px;font-weight:800;color:#f5a623;line-height:1;}
+  .dm-nd-lbl{font-size:10px;color:#5a6a7a;margin-top:3px;line-height:1.3;}
+
+  .dm-imd-section{margin-bottom:10px;}
+  .dm-imd-bar{display:flex;height:24px;border-radius:6px;overflow:hidden;gap:2px;margin-bottom:6px;}
+  .dm-imd-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;}
+
+  .dm-funding-grid{display:grid;gap:5px;}
+  .dm-fund-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:5px;background:#161c26;font-size:11px;border:1px solid rgba(255,255,255,.04);}
+  .dm-fund-name{color:#98a8b8;}
+  .dm-fund-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;font-family:'DM Mono',monospace;}
+  .dm-fund-badge.g{background:rgba(62,207,142,.12);color:#3ecf8e;}
+  .dm-fund-badge.a{background:rgba(245,166,35,.12);color:#f5a623;}
+  .dm-fund-badge.b{background:rgba(79,170,201,.12);color:#4faac9;}
+
+  .dm-table{width:100%;border-collapse:collapse;font-size:11px;}
+  .dm-table th{background:#1c2433;color:#5a6a7a;font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;text-align:left;font-family:'DM Mono',monospace;}
+  .dm-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);color:#e8edf2;}
+  .dm-table td.blue{color:#4faac9;font-weight:600;}
+  .dm-table td.green{color:#3ecf8e;font-weight:600;}
+
+  /* EXPLAINER CARDS */
+  .explainer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem;}
+  .ec{background:var(--card-bg);border:1px solid var(--border-faint);border-radius:12px;padding:1.5rem;transition:border-color .2s;}
+  .ec:hover{border-color:var(--border);}
+  .ec-icon{font-size:1.3rem;margin-bottom:.75rem;display:block;}
+  .ec-title{font-weight:600;font-size:14px;color:var(--white);margin-bottom:.4rem;}
+  .ec-body{font-size:13px;color:var(--white-dim);line-height:1.65;}
+
+  /* BENEFITS */
+  .benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem;}
+  .bc{background:var(--card-bg);border:1px solid var(--border-faint);border-radius:14px;padding:1.75rem;transition:border-color .25s,transform .25s;}
+  .bc:hover{border-color:var(--border);transform:translateY(-3px);}
+  .bc.featured{border-color:var(--border);background:rgba(16,185,130,.06);}
+  .bc-icon{font-size:1.4rem;margin-bottom:.85rem;display:block;}
+  .bc-title{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:400;color:var(--white);margin-bottom:.65rem;line-height:1.3;}
+  .bc-body{font-size:13.5px;color:var(--white-dim);line-height:1.72;}
+  .bc-tag{display:inline-block;margin-top:.85rem;font-family:'DM Mono',monospace;font-size:10px;color:var(--mint);background:var(--mint-dim);border:1px solid var(--border);border-radius:100px;padding:.2rem .65rem;}
+
+  /* SPORT ENGLAND */
+  .se-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem;}
+  .cc-item{padding:1.1rem 1.25rem;border-radius:10px;border:1px solid var(--border-faint);margin-bottom:.75rem;}
+  .cc-item.without{background:rgba(248,250,252,.03);}
+  .cc-item.with{background:rgba(16,185,130,.07);border-color:var(--border);}
+  .cc-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:.5rem;display:block;}
+  .cc-lbl.without{color:var(--white-faint);}
+  .cc-lbl.with{color:var(--mint);}
+  .cc-text{font-size:13.5px;color:var(--white-dim);line-height:1.6;font-style:italic;}
+  .cc-text strong{color:var(--white);font-style:normal;}
+
+  /* PUBLIC HEALTH */
+  .ph-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem;}
+  .ph-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:2rem;position:relative;overflow:hidden;}
+  .ph-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--teal),transparent);}
+  .ph-title{font-family:'DM Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:1.25rem;}
+  .ph-stats{display:grid;gap:.65rem;margin-bottom:1.25rem;}
+  .ph-stat{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border-faint);font-size:13px;}
+  .ph-stat:last-child{border-bottom:none;}
+  .ph-sl{color:var(--white-dim);}
+  .ph-sv{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--blue);}
+  .ph-note{font-size:11.5px;color:var(--white-faint);font-style:italic;line-height:1.6;}
+
+  /* HOW */
+  .how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+  .step{background:var(--card-bg);border:1px solid var(--border-faint);border-radius:14px;padding:1.75rem;transition:border-color .25s,transform .25s;}
+  .step:hover{border-color:var(--border);transform:translateY(-3px);}
+  .step-n{font-family:'DM Mono',monospace;font-size:11px;color:var(--mint);letter-spacing:1px;margin-bottom:1rem;display:block;}
+  .step-t{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:400;color:var(--white);margin-bottom:.65rem;line-height:1.3;}
+  .step-b{font-size:13.5px;color:var(--white-dim);line-height:1.7;}
+
+  /* PROOF */
+  .proof-inner{max-width:900px;margin:0 auto;padding:5rem 2rem;}
+  .proof-club{font-family:'DM Mono',monospace;font-size:11px;color:var(--mint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem;display:block;text-align:center;}
+  .proof-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-bottom:2rem;}
+  .ps{text-align:center;padding:1.5rem 1rem;background:var(--card-bg);border:1px solid var(--border-faint);border-radius:12px;}
+  .ps-v{font-family:'Fraunces',serif;font-size:2rem;color:var(--mint);display:block;font-weight:300;line-height:1;margin-bottom:.35rem;}
+  .ps-l{font-size:12px;color:var(--white-dim);display:block;line-height:1.4;}
+  .proof-note{font-size:13px;color:var(--white-faint);line-height:1.7;font-style:italic;text-align:center;}
+  .proof-note a{color:var(--mint);text-decoration:none;}
+
+  /* CTA */
+  .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;}
+  .cta-h{font-family:'Fraunces',serif;font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;line-height:1.2;letter-spacing:-.02em;margin-bottom:1rem;}
+  .cta-h em{font-style:italic;color:var(--mint);}
+  .cta-b{color:var(--white-dim);font-size:.95rem;line-height:1.75;margin-bottom:1.5rem;}
+  .cta-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:2.5rem;text-align:center;position:relative;overflow:hidden;}
+  .cta-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--mint),var(--teal));}
+  .cta-ct{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:400;color:var(--white);margin-bottom:.65rem;}
+  .cta-cb{font-size:14px;color:var(--white-dim);line-height:1.65;margin-bottom:1.75rem;}
+  .btn-full{display:block;background:var(--mint);color:var(--navy);padding:1rem;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;text-align:center;transition:transform .2s,box-shadow .2s;margin-bottom:.7rem;}
+  .btn-full:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(16,185,130,.28);}
+  .btn-ol{display:block;background:transparent;color:var(--mint);padding:.9rem;border-radius:8px;font-weight:600;font-size:15px;text-decoration:none;text-align:center;border:1.5px solid var(--mint);transition:background .2s;}
+  .btn-ol:hover{background:var(--mint-dim);}
+
+  footer{background:var(--navy-deep);border-top:1px solid var(--border-faint);padding:3rem 2rem;}
+  .foot-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;}
+  .foot-brand-n{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--white);display:block;}
+  .foot-brand-s{font-family:'DM Mono',monospace;font-size:10px;color:var(--mint);letter-spacing:1px;text-transform:uppercase;display:block;margin-top:2px;}
+  .foot-meta{font-size:12px;color:var(--white-faint);line-height:1.8;text-align:right;}
+  .foot-meta a{color:var(--mint);text-decoration:none;}
+
+  @media(max-width:800px){
+    .hero-inner,.two-col,.se-grid,.ph-grid,.cta-grid{grid-template-columns:1fr;gap:2.5rem;}
+    .how-steps,.benefits-grid,.explainer-grid{grid-template-columns:1fr;}
+    .proof-stats{grid-template-columns:repeat(2,1fr);}
+    .dm-hero-stats,.dm-grid2,.dm-nd-grid{grid-template-columns:repeat(2,1fr);}
+    .hero-stats-strip{grid-template-columns:1fr 1fr;}
+    .nav-links{display:none;}
+    .nav-hamburger{display:flex;}
+    .hero{padding:7rem 1.5rem 4rem;}
+    .wrap{padding:4rem 1.5rem;}
+    .foot-meta{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#top" class="nav-brand">
+    <div class="nav-mark">PoP</div>
+    <div><span class="nav-name">Proof of Play</span><span class="nav-sub">by FMHA · withinu</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#dashboard">The dashboard</a></li>
+    <li><a href="#what-it-does">What it does</a></li>
+    <li><a href="#sport-england">Sport England</a></li>
+    <li><a href="#contact" class="nav-cta">Get in touch</a></li>
+  </ul>
+  <button class="nav-hamburger" aria-label="Menu" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer">
+  <a href="#dashboard" onclick="closeMenu()">The dashboard</a>
+  <a href="#what-it-does" onclick="closeMenu()">What it does</a>
+  <a href="#sport-england" onclick="closeMenu()">Sport England</a>
+  <a href="#contact" class="nav-cta" onclick="closeMenu()">Get in touch</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="fade-up">
+      <div class="eyebrow"><span class="dot"></span>For Active Partnerships</div>
+      <h1 class="h1">The club-level data<br>your area reporting<br><em>is missing.</em></h1>
+      <p class="hero-body">Sport England already has your area-level social value figure. What neither of you has is the club-level data that builds the story underneath it — which clubs, which communities, which populations, which funding pots they're ready for. One licence. Every club in your area. A dashboard that builds the picture automatically.</p>
+      <div class="actions">
+        <a href="#contact" class="btn-p">Get in touch</a>
+        <a href="#dashboard" class="btn-g">See the dashboard</a>
+      </div>
+      <div class="hero-stats-strip">
+        <div class="hss"><span class="hss-v">Club</span><span class="hss-l">Level data, not just area aggregate</span></div>
+        <div class="hss"><span class="hss-v">IMD</span><span class="hss-l">Deprivation context per club</span></div>
+        <div class="hss"><span class="hss-v">NHS</span><span class="hss-l">Savings estimate per area</span></div>
+      </div>
+    </div>
+    <div class="fade-up">
+      <div class="browser-wrap" style="margin-bottom:0;">
+        <div class="browser-bar">
+          <div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div>
+          <div class="browser-url">proofofplay.withinu.net/dashboard</div>
+        </div>
+        <div class="dash-mock">
+          <div class="dm-header">
+            <div><div class="dm-brand">Proof of <em>Play</em> · Partner Dashboard</div><div class="dm-org">Yorkshire Sport Foundation</div></div>
+            <div class="dm-btns"><div class="dm-btn">Export CSV</div><div class="dm-btn">Log out</div></div>
+          </div>
+          <div class="dm-body">
+            <div class="dm-updated">Last submission: 2 Apr 2026 · 11 clubs opted in</div>
+            <div class="dm-section-title">Community at a glance</div>
+            <div class="dm-hero-stats">
+              <div class="dm-stat hl"><div class="dm-stat-lbl">Total Social Value</div><div class="dm-stat-val">£18.4M</div><div class="dm-stat-sub">Annual est. value across 11 clubs</div></div>
+              <div class="dm-stat"><div class="dm-stat-lbl">Total Participants</div><div class="dm-stat-val g">4,820</div><div class="dm-stat-sub">3,210 junior · 1,390 adult · 220 disability</div></div>
+              <div class="dm-stat"><div class="dm-stat-lbl">Volunteer Workforce</div><div class="dm-stat-val">1,240</div><div class="dm-stat-sub">198K hrs/yr · £6.4M economic value</div></div>
+              <div class="dm-stat"><div class="dm-stat-lbl">NHS Savings</div><div class="dm-stat-val a">£462K</div><div class="dm-stat-sub">Annual healthcare saving estimate</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE DASHBOARD -->
+<section class="band-dark" id="dashboard">
+  <div class="wrap">
+    <span class="lbl fade-up">The dashboard</span>
+    <h2 class="h2 fade-up">The area picture<br><em>you currently don't have.</em></h2>
+
+    <div class="dashboard-intro fade-up">
+      <p>Every club that completes Proof of Play feeds your area dashboard automatically. No manual data entry, no chasing spreadsheets. As completions grow, so does the picture — total social value by place, NHS savings aggregated across your network, deprivation data by postcode, welfare infrastructure gaps, multi-sport breakdown, funding readiness per club.</p>
+      <p><strong>This is what you're licensing.</strong> The tool is what clubs use. The dashboard is what your Active Partnership gets — an area-wide dataset that doesn't exist anywhere else. The evidence base for Sport England submissions, local authority conversations, public health commissioner meetings, and your own board.</p>
+    </div>
+
+    <!-- Full AP dashboard mockup -->
+    <div class="browser-wrap fade-up">
+      <div class="browser-bar">
+        <div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div>
+        <div class="browser-url">proofofplay.withinu.net/dashboard · Yorkshire Sport Foundation</div>
+      </div>
+      <div class="dash-mock">
+        <div class="dm-header">
+          <div><div class="dm-brand">Proof of <em>Play</em> · Partner Dashboard</div><div class="dm-org">Yorkshire Sport Foundation</div></div>
+          <div class="dm-btns"><div class="dm-btn">Export CSV</div><div class="dm-btn">Log out</div></div>
+        </div>
+        <div class="dm-body">
+          <div class="dm-updated">Last submission: 2 April 2026 · 11 clubs opted in</div>
+
+          <div class="dm-section-title">Community at a glance</div>
+          <div class="dm-hero-stats">
+            <div class="dm-stat hl"><div class="dm-stat-lbl">Total Social Value</div><div class="dm-stat-val">£18.4M</div><div class="dm-stat-sub">Annual est. value across 11 clubs</div></div>
+            <div class="dm-stat"><div class="dm-stat-lbl">Total Participants</div><div class="dm-stat-val g">4,820</div><div class="dm-stat-sub">3,210 junior · 1,390 adult · 220 disability</div></div>
+            <div class="dm-stat"><div class="dm-stat-lbl">Volunteer Workforce</div><div class="dm-stat-val">1,240</div><div class="dm-stat-sub">198K hrs/yr · £6.4M economic value</div></div>
+            <div class="dm-stat"><div class="dm-stat-lbl">NHS Savings</div><div class="dm-stat-val a">£462K</div><div class="dm-stat-sub">Annual healthcare saving estimate</div></div>
+          </div>
+
+          <div class="dm-grid2">
+            <div class="dm-card">
+              <div class="dm-card-title">Social value breakdown</div>
+              <div class="dm-brow"><span class="dm-brow-l">Participant wellbeing</span><span class="dm-brow-v b">£13.1M</span></div>
+              <div class="dm-brow"><span class="dm-brow-l">NHS &amp; healthcare savings</span><span class="dm-brow-v">£462K</span></div>
+              <div class="dm-brow"><span class="dm-brow-l">Volunteer contribution</span><span class="dm-brow-v">£4.6M</span></div>
+              <div class="dm-brow"><span class="dm-brow-l">Community programmes</span><span class="dm-brow-v">£240K</span></div>
+              <div class="dm-brow"><span class="dm-brow-l" style="font-weight:600;color:#e8edf2;">Total</span><span class="dm-brow-v g">£18.4M</span></div>
+            </div>
+            <div class="dm-card">
+              <div class="dm-card-title">Area deprivation profile</div>
+              <div class="dm-imd-section">
+                <div class="dm-imd-bar">
+                  <div class="dm-imd-seg" style="flex:3;background:#dc2626;color:white;">3</div>
+                  <div class="dm-imd-seg" style="flex:2;background:#ea580c;color:white;">2</div>
+                  <div class="dm-imd-seg" style="flex:4;background:#ca8a04;color:white;">4</div>
+                  <div class="dm-imd-seg" style="flex:2;background:#16a34a;color:white;">2</div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:9px;color:#5a6a7a;font-family:'DM Mono',monospace;">
+                  <span>D1-2 (3)</span><span>D3-4 (2)</span><span>D5-7 (4)</span><span>D8-10 (2)</span>
+                </div>
+              </div>
+              <div class="dm-brow"><span class="dm-brow-l">SE Movement Fund priority</span><span class="dm-brow-v g">5 clubs eligible</span></div>
+              <div class="dm-brow"><span class="dm-brow-l">Peter Harrison Foundation</span><span class="dm-brow-v b">3 clubs eligible</span></div>
+              <div class="dm-brow"><span class="dm-brow-l">Priority area funding (D1-4)</span><span class="dm-brow-v a">5 clubs eligible</span></div>
+            </div>
+          </div>
+
+          <div class="dm-section-title">Hidden need across your area</div>
+          <div class="dm-nd-grid">
+            <div class="dm-nd-box"><div class="dm-nd-num">675</div><div class="dm-nd-lbl">Players likely to be neurodivergent across your clubs</div></div>
+            <div class="dm-nd-box"><div class="dm-nd-num">1,205</div><div class="dm-nd-lbl">Likely to experience a MH difficulty this season</div></div>
+            <div class="dm-nd-box"><div class="dm-nd-num">1,680</div><div class="dm-nd-lbl">Likely to need additional understanding or support</div></div>
+          </div>
+
+          <div class="dm-section-title">Funding readiness</div>
+          <div class="dm-funding-grid">
+            <div class="dm-fund-row"><span class="dm-fund-name">Football Foundation Small Grants</span><span class="dm-fund-badge g">9 clubs ready</span></div>
+            <div class="dm-fund-row"><span class="dm-fund-name">Sport England Movement Fund</span><span class="dm-fund-badge g">11 clubs ready</span></div>
+            <div class="dm-fund-row"><span class="dm-fund-name">Awards for All (NLCF)</span><span class="dm-fund-badge g">11 clubs ready</span></div>
+            <div class="dm-fund-row"><span class="dm-fund-name">Priority area funding (Decile 1–4)</span><span class="dm-fund-badge a">5 clubs eligible</span></div>
+            <div class="dm-fund-row"><span class="dm-fund-name">Local Authority / Social Value Act</span><span class="dm-fund-badge g">11 clubs ready</span></div>
+            <div class="dm-fund-row"><span class="dm-fund-name">Barclays Community Sport Fund</span><span class="dm-fund-badge b">7 clubs eligible</span></div>
+          </div>
+
+          <div class="dm-section-title" style="margin-top:14px;">Clubs in your area</div>
+          <table class="dm-table">
+            <tr><th>Club</th><th>Sport</th><th>IMD</th><th>Social Value</th><th>Players</th></tr>
+            <tr><td>Histon Hornets FC</td><td>Football</td><td>D5</td><td class="blue">£2.88M</td><td>562</td></tr>
+            <tr><td>Wetherby Athletic</td><td>Football</td><td>D3</td><td class="blue">£1.94M</td><td>380</td></tr>
+            <tr><td>Sheffield Cricket Club</td><td>Cricket</td><td>D2</td><td class="green">£2.12M</td><td>420</td></tr>
+            <tr><td style="color:#5a6a7a;font-style:italic;" colspan="5">+ 8 more clubs</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explainer cards -->
+    <h3 style="font-family:'Fraunces',serif;font-size:1.5rem;font-weight:300;color:var(--white);margin-top:3rem;margin-bottom:.5rem;">What the dashboard gives your Active Partnership</h3>
+    <p style="color:var(--white-dim);font-size:.95rem;margin-bottom:2rem;">Six distinct uses for the data your area generates automatically.</p>
+    <div class="explainer-grid">
+      <div class="ec fade-up">
+        <span class="ec-icon">🗺️</span>
+        <div class="ec-title">Area-wide social value picture</div>
+        <div class="ec-body">Total social value, SROI, NHS savings and volunteer contribution aggregated across every club in your area. The granular evidence Sport England wants underneath the area aggregate — which clubs, which communities, which populations.</div>
+      </div>
+      <div class="ec fade-up">
+        <span class="ec-icon">📍</span>
+        <div class="ec-title">Place-based data your leads can use</div>
+        <div class="ec-body">IMD deprivation decile per club postcode, automatically sourced from government data. Your place leads see which clubs are in the most deprived communities, which are eligible for targeted funding, and where the case for investment is strongest.</div>
+      </div>
+      <div class="ec fade-up">
+        <span class="ec-icon">💷</span>
+        <div class="ec-title">Funding readiness across your network</div>
+        <div class="ec-body">The dashboard flags which clubs are ready for which specific funding pots — Sport England, National Lottery, local authority grants, Barclays — based on each club's own data. You become the organisation that helped them get funded.</div>
+      </div>
+      <div class="ec fade-up">
+        <span class="ec-icon">🏥</span>
+        <div class="ec-title">NHS savings evidence for ICS conversations</div>
+        <div class="ec-body">Healthcare savings estimates aggregated across your whole network, built on HM Treasury WELLBY methodology. The language public health commissioners and Integrated Care Systems already use — ready for your next meeting.</div>
+      </div>
+      <div class="ec fade-up">
+        <span class="ec-icon">🧠</span>
+        <div class="ec-title">Hidden welfare need by area</div>
+        <div class="ec-body">ND and MH prevalence estimates across your whole club network — statistically, not case-by-case. How many players across your area are likely to need additional support? Now you can answer that question.</div>
+      </div>
+      <div class="ec fade-up">
+        <span class="ec-icon">📋</span>
+        <div class="ec-title">Quarterly reports, automatically</div>
+        <div class="ec-body">The dashboard generates quarterly PDF reports for your board, Sport England, local authorities, and ICS presentations. Export CSV at any point. Multi-sport breakdown included — not just football.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section id="what-it-does">
+  <div class="wrap">
+    <span class="lbl fade-up">What it does for your Active Partnership</span>
+    <h2 class="h2 fade-up">Four things your area reporting<br><em>currently can't show.</em></h2>
+    <div class="benefits-grid">
+      <div class="bc featured fade-up">
+        <span class="bc-icon">🗺️</span>
+        <h3 class="bc-title">Club-level evidence that builds your area story</h3>
+        <p class="bc-body">Sport England's area-level figure tells you the aggregate. Proof of Play sits underneath it — club by club, community by community. Thirty completions and you can show Sport England, local authorities and public health commissioners not just a regional total, but where it's generated and who it reaches.</p>
+        <span class="bc-tag">Area dashboard included</span>
+      </div>
+      <div class="bc fade-up">
+        <span class="bc-icon">📍</span>
+        <h3 class="bc-title">Place-based data that matches how you work</h3>
+        <p class="bc-body">IMD deprivation decile per club postcode, automatically sourced from the Office for Health Improvement and Disparities. Your place leads see which clubs are in the most deprived communities, which are eligible for targeted funding, and where the case for investment is strongest.</p>
+        <span class="bc-tag">IMD data per club</span>
+      </div>
+      <div class="bc fade-up">
+        <span class="bc-icon">🏥</span>
+        <h3 class="bc-title">NHS savings evidence for public health conversations</h3>
+        <p class="bc-body">Healthcare savings estimates aggregated across your network on HM Treasury WELLBY methodology. When you're making the case to a local authority or ICS, you can show what physical inactivity costs versus what your clubs prevent — in the language commissioners already use.</p>
+        <span class="bc-tag">Public health framing</span>
+      </div>
+      <div class="bc fade-up">
+        <span class="bc-icon">🤝</span>
+        <h3 class="bc-title">A reason to engage every club in your area</h3>
+        <p class="bc-body">Your place leads have a tool that gives every club something genuinely useful — a social value report, SROI figure, press release and funding guide — in ten minutes. A service worth offering. A conversation starter that goes beyond participation numbers. Every completion feeds your area dashboard.</p>
+        <span class="bc-tag">Multi-sport · All clubs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPORT ENGLAND -->
+<section class="band-dark" id="sport-england">
+  <div class="wrap">
+    <span class="lbl fade-up">Sport England reporting</span>
+    <h2 class="h2 fade-up">A different conversation<br><em>with the people holding the budget.</em></h2>
+    <div class="se-grid">
+      <div class="prose fade-up">
+        <p>Sport England's Active Lives data tells you participation numbers. Their area-level social value model gives you the aggregate. But neither tells you which specific clubs and communities are generating that value — and that's the question that matters when you're in a room with a local authority or a public health commissioner deciding where to invest.</p>
+        <p>Proof of Play gives you the granular layer. Which clubs in your area are generating the strongest social value? Which communities have the highest deprivation and the lowest investment? Which populations are being reached?</p>
+        <p><strong>That's a fundamentally different report to put in front of Sport England than an area aggregate.</strong> And a fundamentally different conversation with a council deciding whether to renew facility leases.</p>
+      </div>
+      <div class="fade-up">
+        <div class="cc-item without">
+          <span class="cc-lbl without">Without Proof of Play</span>
+          <p class="cc-text">"Our area generates £Xbn in social value from community sport and physical activity."</p>
+        </div>
+        <div class="cc-item with">
+          <span class="cc-lbl with">With Proof of Play</span>
+          <p class="cc-text">"Our area generates £Xbn — and here's the breakdown by club, community and deprivation decile. <strong>These twelve clubs in your most deprived wards generate £Y in combined social value and £Z in NHS savings. This is what cutting their facility budgets actually costs.</strong>"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLIC HEALTH -->
+<section id="public-health">
+  <div class="wrap">
+    <span class="lbl fade-up">Public health commissioners</span>
+    <h2 class="h2 fade-up">Community sport as a<br><em>public health investment case.</em></h2>
+    <div class="ph-grid">
+      <div class="prose fade-up">
+        <p>Public health commissioners and Integrated Care Systems want to see community sport framed as a health intervention, not just a participation programme. They speak the language of NHS savings, WELLBY methodology, and cost per outcome.</p>
+        <p>Every club report generates an NHS and healthcare savings estimate using HM Treasury WELLBY methodology. Aggregate those across your network and you have a public health investment case built from the ground up — in the language commissioners already use.</p>
+        <p>Add the deprivation context and population breakdown, and the conversation changes completely.</p>
+      </div>
+      <div class="ph-card fade-up">
+        <div class="ph-title">NHS savings · Example: area aggregate (11 clubs)</div>
+        <div class="ph-stats">
+          <div class="ph-stat"><span class="ph-sl">Total NHS savings estimate</span><span class="ph-sv">£462K/yr</span></div>
+          <div class="ph-stat"><span class="ph-sl">GP visit reduction component</span><span class="ph-sv">Included</span></div>
+          <div class="ph-stat"><span class="ph-sl">Mental health service savings</span><span class="ph-sv">Included</span></div>
+          <div class="ph-stat"><span class="ph-sl">Long-term condition prevention</span><span class="ph-sv">Included</span></div>
+          <div class="ph-stat"><span class="ph-sl">Methodology</span><span class="ph-sv">HM Treasury WELLBY</span></div>
+        </div>
+        <p class="ph-note">Aggregated from 11 clubs across the Yorkshire area. Scales as more clubs complete assessments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="band-dark" id="how-it-works">
+  <div class="wrap">
+    <span class="lbl fade-up">How it works</span>
+    <h2 class="h2 fade-up">Simple to deploy.<br><em>Your place leads do the rest.</em></h2>
+    <div class="how-steps">
+      <div class="step fade-up">
+        <span class="step-n">01 · You</span>
+        <h3 class="step-t">One licence. Your whole area.</h3>
+        <p class="step-b">A single annual licence covers every club across your Active Partnership area. Multi-sport by design — football, cricket, rugby, swimming, bowls. Your place leads distribute it as a service from your organisation. The relationship stays yours.</p>
+      </div>
+      <div class="step fade-up">
+        <span class="step-n">02 · Clubs</span>
+        <h3 class="step-t">Ten minutes. A full report.</h3>
+        <p class="step-b">Clubs enter their own data — players, volunteers, sessions, programmes. The tool applies published proxy values and generates a complete social value report immediately. No support needed, no training required.</p>
+      </div>
+      <div class="step fade-up">
+        <span class="step-n">03 · You again</span>
+        <h3 class="step-t">The area picture builds automatically.</h3>
+        <p class="step-b">Every completion feeds your dashboard — aggregate value, deprivation data by place, NHS savings, funding readiness, welfare infrastructure. Quarterly reports generated automatically for your Sport England, local authority, and ICS conversations.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<section class="band-mid">
+  <div class="proof-inner fade-up">
+    <span class="proof-club">Yorkshire Sport Foundation · 11 clubs participating · area dashboard live</span>
+    <div class="proof-stats">
+      <div class="ps"><span class="ps-v">£18.4M</span><span class="ps-l">Combined estimated social value</span></div>
+      <div class="ps"><span class="ps-v">£462K</span><span class="ps-l">NHS savings across the area</span></div>
+      <div class="ps"><span class="ps-v">4,820</span><span class="ps-l">Participants across all clubs</span></div>
+      <div class="ps"><span class="ps-v">&lt;10 min</span><span class="ps-l">Per club assessment</span></div>
+    </div>
+    <p class="proof-note">11 clubs. Imagine the picture when your whole area is in it.<br><a href="https://vault.thefmha.com/how-proof-of-play-calculates-social-value/" target="_blank">Full methodology →</a></p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact">
+  <div class="wrap">
+    <div class="cta-grid">
+      <div class="fade-up">
+        <span class="lbl">Ready to talk?</span>
+        <h2 class="cta-h">The club-level data<br><em>your area needs.</em></h2>
+        <p class="cta-b">We'll show you the area dashboard live, walk through how the place-based data works, and talk through what the public health commissioner conversation looks like with this evidence behind it. No pitch deck. Just a straight conversation.</p>
+      </div>
+      <div class="cta-card fade-up">
+        <h3 class="cta-ct">Get in touch</h3>
+        <p class="cta-cb">Danny Matharu · FMHA / withinu</p>
+        <a href="mailto:danny@withinu.net?subject=Proof of Play — Active Partnership conversation" class="btn-full">danny@withinu.net</a>
+        <a href="tel:03330500399" class="btn-ol">03330 500 399</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div><span class="foot-brand-n">Proof of Play</span><span class="foot-brand-s">by FMHA · withinu</span></div>
+    <div class="foot-meta">
+      Built on HM Treasury WELLBY methodology and Sport England's 2023/24 Social Value Model.<br>
+      Outputs are evidence-informed estimates. Not independently audited.<br>
+      <a href="https://vault.thefmha.com/how-proof-of-play-calculates-social-value/" target="_blank">Full methodology →</a>&nbsp;·&nbsp;<a href="https://thefmha.com" target="_blank">thefmha.com</a>&nbsp;·&nbsp;<a href="https://withinu.net" target="_blank">withinu.net</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.fade-up').forEach(el => el.classList.add('js-ready'));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  function toggleMenu() { document.querySelector('.nav-hamburger').classList.toggle('open'); document.getElementById('nav-drawer').classList.toggle('open'); }
+  function closeMenu() { document.querySelector('.nav-hamburger').classList.remove('open'); document.getElementById('nav-drawer').classList.remove('open'); }
+  document.addEventListener('click', function(e) { if (!e.target.closest('nav') && !e.target.closest('#nav-drawer')) closeMenu(); });
+</script>
+</body>
+</html>
